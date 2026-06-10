@@ -35,8 +35,8 @@
       state: directory
 
   - name: Download a file from a URL
-    ansible.builtin.get_url:
-      url: "/tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip"
+    get_url:
+      url: "https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip"
       dest: "/tmp/catalogue.zip"
 
   - name: Extract foo.tgz into /var/lib/foo
@@ -86,7 +86,7 @@
     systemd_service:
       name: catalogue
       daemon_reload: true
-      
+
   - name: enable and start catalogue
     service:
       name: catalogue
