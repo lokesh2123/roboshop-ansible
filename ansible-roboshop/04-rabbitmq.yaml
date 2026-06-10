@@ -10,7 +10,7 @@
   
   - name: installing the rabitmq server
     package:
-      name: rabitmq-server
+      name: rabbitmq-server
       state: present
   
   - name: enable and start the service
