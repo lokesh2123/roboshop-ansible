@@ -1,0 +1,29 @@
+# configuring the mongodb server using the ansible 
+
+- name: configuring the mongodb server
+  hosts: mongodb
+  become: yes
+  
+  tasks:
+  - name: Setup the MongoDB repo file
+    ansible.builtin.copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+
+  - name: Install MongoDB packages
+    package:
+      name: mongodb-org
+      state: present
+
+  - name: Replace a specific configuration line
+    lineinfile:
+      path: /etc/mongod.conf
+      regexp: '127.0.0.1'
+      line: '0.0.0.0'
+      state: present
+
+  - name: Enable and start MongoDB service
+    service:
+      name: mongod
+      state: started
+      enabled: yes

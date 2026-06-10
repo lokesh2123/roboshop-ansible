@@ -1,0 +1,35 @@
+# configuring the redis server using the ansible 
+
+- name: configuring the redis server
+  hosts: redis
+  become: yes
+
+  tasks:
+  - name: enable the redis installer
+    command: dnf module enable redis:7 -y
+
+  - name: Enable and start the package service
+    service:
+      name: redis
+      state: started
+      enabled: true
+
+  - name: Replace specific text pattern throughout the file
+    replace:
+      path: /etc/redis/redis.conf
+      regexp: '127.0.0.1'
+      replace: '0.0.0.0'
+
+  - name: Replace an entire line in a file
+    lineinfile:
+      path: /etc/redis/redis.conf
+      regexp: '^protected-mode yes'
+      line: 'protected-mode no'
+      state: present
+
+  - name: Ensure Redis is enabled and started
+    service:
+      name: redis
+      state: started
+      enabled: true
+

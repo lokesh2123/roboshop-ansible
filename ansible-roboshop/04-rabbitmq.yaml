@@ -1,0 +1,31 @@
+- name: configuring the rabbitmq server
+  hosts: rabbitmq
+  become: yes
+
+  tasks:
+  - name: Setup the MongoDB repo file
+    copy:
+      src: rabbitmq.repo
+      dest: /etc/yum.repos.d/rabbitmq.repo
+  
+  - name: installing the rabbitmq server
+    package:
+      name: rabbitmq-server
+      state: present
+  
+  - name: enable and start the service
+    service:
+      name: rabbitmq-server
+      state: started
+      enabled: true
+
+  - name: creating the user for rabbitmq
+    ommunity.rabbitmq.rabbitmq_user:
+      user: roboshop
+      password: roboshop123
+      permissions:
+      - vhost: /
+        configure_priv: .*
+        read_priv: .*
+        write_priv: .*
+      state: present

@@ -1,0 +1,88 @@
+- name: provisioning the infrastructure
+  hosts: local
+  connection: local
+  become: yes
+
+  vars:
+    instances: ["mongodb", "redis", "mysqldb", "rabbitmq", "catalogue", "user", "cart", "shipping", "payment", "frontend"]
+    image_id: ami-0220d79f3f480ecf5
+    zone_id: Z04296232TPHCB0NK6KLW
+    domain_name: lokesh23.online
+
+  tasks:
+  - name: creating the instances
+    amazon.aws.ec2_instance:
+      name: "robo-{{ item }}"
+      instance_type: t3.micro
+      region: us-east-1
+      image_id: "{{ image_id }}"
+      security_groups:
+        - "robo-{{ item }}"
+        - robo-common 
+    loop: "{{ instances }}"
+    register: ec2_output
+    when: action == "create"
+
+  # - name: print the output
+  #   debug:
+  #     msg: "{{ ec2_output }}"
+
+  # - name: print the name and ip address
+  #   debug:
+  #     msg: "name of the instance: {{ item.item }}, private ip : {{ item.instances[0].private_ip_address }}"
+  #   loop: "{{ ec2_output.results }}"
+
+  - name: update the R53 records
+    amazon.aws.route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "{{ item.item }}.{{ domain_name }}" # mongodb.lokesh23.online
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0].private_ip_address }}"
+    loop: "{{ ec2_output.results }}"
+    when: action == "create"
+
+  - name: update the public ip address
+    amazon.aws.route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "{{ domain_name }}" # mongodb.lokesh23.online
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0].public_ip_address }}"
+    loop: "{{ ec2_output.results }}"
+    when: 
+      - item.item == "frontend"
+      - action == "create"
+
+  - name: delete r53 records
+    amazon.aws.route53:
+      state: absent
+      zone: "{{ domain_name }}"
+      record: "{{ item }}.{{ domain_name }}" 
+      ttl: 1
+      type: A
+    loop: "{{ instances  }}"  
+    when: action == "delete"
+
+  - name: delete r53 record for frontend
+    amazon.aws.route53:
+      state: absent
+      zone: "{{ domain_name }}"
+      record: "{{ domain_name }}" 
+      ttl: 1
+      type: A
+    loop: "{{ instances  }}"  
+    when: 
+    - action == "delete"
+    - item == "frontend"
+  
+  - name: delete ec2 instances
+    amazon.aws.ec2_instance:
+      state: absent
+      region: us-east-1
+      name: "robo-{{ item }}"
+      wait: false
+    loop: "{{ instances  }}"  
+    when: action == "delete"
