@@ -5,21 +5,21 @@
   tasks:
   - name: Setup the MongoDB repo file
     copy:
-      src: rabbitmq.repo
-      dest: /etc/yum.repos.d/rabbitmq.repo
+      src: rabitmq.repo
+      dest: /etc/yum.repos.d/rabitmq.repo
   
-  - name: installing the rabbitmq server
+  - name: installing the rabitmq server
     package:
-      name: rabbitmq-server
+      name: rabitmq-server
       state: present
   
   - name: enable and start the service
     service:
-      name: rabbitmq-server
+      name: rabitmq-server
       state: started
       enabled: true
 
-  - name: creating the user for rabbitmq
+  - name: creating the user for rabitmq
     community.rabbitmq.rabbitmq_user:
       user: roboshop
       password: roboshop123
