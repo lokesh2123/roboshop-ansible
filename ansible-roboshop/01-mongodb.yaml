@@ -2,14 +2,13 @@
 
 - name: configuring the mongodb server
   hosts: mongodb
-  connections: local
   become: yes
   
   tasks:
   - name: Setup the MongoDB repo file
-    ansible.builtin.copy:
-    src: mongo.repo
-    dest: /etc/yum.repos.d/mongo.repo
+    copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
 
   - name: Install MongoDB packages
     package:
