@@ -2,6 +2,7 @@
 
 - name: configuring the mongodb server
   hosts: mongodb
+  connections: local
   become: yes
   
   tasks:
