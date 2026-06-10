@@ -20,7 +20,7 @@
       enabled: true
 
   - name: creating the user for rabbitmq
-    ommunity.rabbitmq.rabbitmq_user:
+    community.rabbitmq.rabbitmq_user:
       user: roboshop
       password: roboshop123
       permissions:
