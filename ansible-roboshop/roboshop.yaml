@@ -1,5 +1,5 @@
 - name: provisioning the infrastructure
-  hosts: local
+  hosts: all
   connection: local
   become: yes
 
