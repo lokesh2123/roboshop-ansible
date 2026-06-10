@@ -1,5 +1,5 @@
 - name: configuring the mysql server
-  hosts: mysqldb
+  hosts: mysql
   become: yes
 
   tasks:
