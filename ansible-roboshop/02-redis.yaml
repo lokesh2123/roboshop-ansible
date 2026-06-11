@@ -22,7 +22,7 @@
   - name: Replace an entire line in a file
     lineinfile:
       path: /etc/redis/redis.conf
-      regexp: '^protected-mode yes'
+      regexp: 'protected-mode yes'
       line: 'protected-mode no'
       state: present
 
