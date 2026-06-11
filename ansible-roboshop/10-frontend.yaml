@@ -3,9 +3,6 @@
   become: yes
 
   tasks:
-  - name: list the nginx module
-    command: dnf module list nginx
-
   - name: enable the nginx 
     command: dnf module enable nginx:1.24 -y
 
@@ -26,7 +23,7 @@
 
   - name: create the  html directory
     file:
-      name: /usr/share/nginx/html/
+      path: /usr/share/nginx/html/
       state: directory
 
   - name: download the application code 
