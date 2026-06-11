@@ -41,7 +41,7 @@
     replace:
       path: /etc/mongod.conf
       regexp: '127.0.0.1'
-      replace: '0.0.0.0'
+      replace: 'bindIP: 0.0.0.0'
   - name: start and enable mongodb
     service:
       name: mongod
