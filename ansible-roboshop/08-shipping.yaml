@@ -5,8 +5,11 @@
   tasks:
   - name: install the mvn package
     package:
-      name: maven
+      name: "{{ item }}"
       state: present
+    loop:
+    - maven
+    - mysql
     
   - name: creating the system user
     user:
