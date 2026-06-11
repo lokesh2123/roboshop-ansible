@@ -57,7 +57,7 @@
 
   - name: load the daemon service
     systemd_service:
-    daemon_reload: true
+      daemon_reload: true
   
   - name: enable and start the cart
     service:
