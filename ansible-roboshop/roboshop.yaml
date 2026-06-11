@@ -80,7 +80,7 @@
   
   - name: delete ec2 instances
     amazon.aws.ec2_instance:
-      state: prsent
+      state: absent
       region: us-east-1
       name: "robo-{{ item }}"
       wait: false
